@@ -1,0 +1,18 @@
+
+SELECT `p`.`product_id` AS `product_id`,`p`.`vendor_id` AS `vendor_id`,`p`.`product_status` AS `product_status`,`p`.`product_drop_status` AS `product_drop_status`,`p`.`created_at` AS `created_at`,`p`.`updated_at` AS `updated_at` ,cat.cat_id ,cat.category_name ,subcat.subcat_id ,subcat.subcategory_name ,brands.brand_id ,brands.brand_name,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'product_name' LIMIT 1) AS product_name,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'SKU' LIMIT 1) AS SKU,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'product_desc' LIMIT 1) AS product_desc,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'product_price' LIMIT 1) AS product_price,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'product_offer_price' LIMIT 1) AS product_offer_price,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'product_image' LIMIT 1) AS product_image,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'product_estimate_time' LIMIT 1) AS product_estimate_time,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'product_stock' LIMIT 1) AS product_stock,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'product_local_shipping_fee' LIMIT 1) AS product_local_shipping_fee,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'flash_deals' LIMIT 1) AS flash_deals,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'discount_type' LIMIT 1) AS discount_type,
+(SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'discount_amount' LIMIT 1) AS discount_amount
+FROM `products`as p 
+LEFT JOIN category AS cat ON cat.cat_id = (SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id =p.product_id AND pd.attribute_name = 'product_category' LIMIT 1)
+LEFT JOIN subcategory AS subcat ON subcat.subcat_id = (SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'product_subcategory' LIMIT 1)
+LEFT JOIN brands ON brands.brand_id = (SELECT pd.attribute_value FROM product_detail as pd WHERE pd.product_id = p.product_id AND pd.attribute_name = 'product_brand' LIMIT 1) WHERE P.product_drop_status = 'no'
